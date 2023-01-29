@@ -9,6 +9,11 @@ class CSVManager(MixinPathMethods):
         self.path = Path(*path_segments)
         self.depth = depth
         self.file_name_path = self.path.joinpath(file_name)
+        self.abs_path = (
+            self.file_name_path
+            if self.file_name_path.is_absolute()
+            else Path.cwd().joinpath(self.file_name_path)
+        )
 
     def read_csv(self):
         return pd.read_csv(self.file_name_path)
