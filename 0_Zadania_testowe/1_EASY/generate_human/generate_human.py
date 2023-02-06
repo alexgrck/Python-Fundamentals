@@ -4,6 +4,21 @@ from unidecode import unidecode
 
 
 def generate_human(name: str, surname: str):
+    """Return dictionary containing information about the person.
+
+    Parameters
+    ----------
+    name : str
+        A name of the person that will be used to generate the dictionary.
+    surname : str
+        A surname of the person that will be used to generate the dictionary.
+
+    Returns
+    -------
+    dict
+        dictionary with information about the generated person
+    """
+
     name_standarized = unidecode(name.lower())
     surname_standarized = unidecode(surname.lower())
     email = f"{name_standarized}{surname_standarized}@gmail.com"
