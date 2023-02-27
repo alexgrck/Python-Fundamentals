@@ -2,6 +2,7 @@ import os
 import shutil
 from pathlib import Path, WindowsPath
 from unittest import TestCase
+from unittest.mock import patch
 
 from folder_manager import FolderManager
 
@@ -14,7 +15,7 @@ class TestFolderManager(TestCase):
             "LocalHost",
             "python-fundamentals-master",
             "3_Python_OS",
-            "1. EASY",
+            "1_EASY",
             "folder_manager",
         )
 
@@ -34,19 +35,21 @@ class TestFolderManager(TestCase):
         self.assertTrue(folders_path)
 
     def test_list_content_of_folder(self):
-        list_content = self.fm.list_content_of_folder(self.fm.abs_path)
+        list_content = self.fm.list_content_of_folder(
+            r"C:\Ola\LocalHost\python-fundamentals-master\3_Python_OS\1_EASY\folder_manager"
+        )
         test_list = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1. EASY/folder_manager/folder_manager-easy.md"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/folder_manager-easy.md"
             ),
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1. EASY/folder_manager/folder_manager.py"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/folder_manager.py"
             ),
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1. EASY/folder_manager/folder_manager_with_comments.py"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/folder_manager_with_comments.py"
             ),
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1. EASY/folder_manager/test_folder_manager.py"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/test_folder_manager.py"
             ),
         ]
 
@@ -59,11 +62,14 @@ class TestFolderManager(TestCase):
         self.fm.delete_folders(folder_path)
         self.assertTrue(path_after_deletion)
 
+    @patch("builtins.input", retun_value="y")
     def test_delete_folder_with_subdirectories(self):
         self.fm.create_folders("folder1", "folder2")
         folder_path = self.fm.abs_path.joinpath("folder1")
+        # with patch("builtins.input", return_value="y") as mock_fm:
         with self.assertWarns(Warning):
             self.fm.delete_folders(folder_path)
+        self.assertFalse(folder_path)
         # mocking
 
     # niby działa, ale w konsoli trzeba odpowiedzieć na input
