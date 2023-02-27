@@ -1,6 +1,6 @@
 import os
 import shutil
-from pathlib import Path, WindowsPath
+from pathlib import WindowsPath
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -62,17 +62,22 @@ class TestFolderManager(TestCase):
         self.fm.delete_folders(folder_path)
         self.assertTrue(path_after_deletion)
 
-    @patch("builtins.input", retun_value="y")
-    def test_delete_folder_with_subdirectories(self):
+    @patch("builtins.input", return_value="y")
+    def test_delete_folder_with_subdirectories_yes_input(self, mocked_input):
         self.fm.create_folders("folder1", "folder2")
         folder_path = self.fm.abs_path.joinpath("folder1")
-        # with patch("builtins.input", return_value="y") as mock_fm:
         with self.assertWarns(Warning):
             self.fm.delete_folders(folder_path)
-        self.assertFalse(folder_path)
-        # mocking
+        self.assertTrue(folder_path)
 
-    # niby działa, ale w konsoli trzeba odpowiedzieć na input
+    @patch("builtins.input", return_value="y")
+    def test_delete_folder_with_subdirectories_no_input(self, mocked_input):
+        self.fm.create_folders("folder1", "folder2")
+        folder_path = self.fm.abs_path.joinpath("folder1", "folder2")
+        folder_to_delete = self.fm.abs_path.joinpath("folder1")
+        with self.assertWarns(Warning):
+            self.fm.delete_folders(folder_to_delete)
+        self.assertTrue(folder_path)
 
     def test_create_folder_tree(self):
         test_dict = {
