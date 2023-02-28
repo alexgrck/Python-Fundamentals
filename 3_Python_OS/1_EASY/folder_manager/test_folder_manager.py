@@ -10,13 +10,7 @@ from folder_manager import FolderManager
 class TestFolderManager(TestCase):
     def setUp(self):
         self.fm = FolderManager(
-            "C:/",
-            "Ola",
-            "LocalHost",
-            "python-fundamentals-master",
-            "3_Python_OS",
-            "1_EASY",
-            "folder_manager",
+            "C://Ola//LocalHost//python-fundamentals-master//3_Python_OS//1_EASY//folder_manager",
         )
 
     def tearDown(self):
