@@ -1,12 +1,15 @@
 from pathlib import Path
-
+import sys
 import pandas as pd
-from mixin_path_methods import MixinPathMethods
+
+sys.path.append("C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY")
+
+from path_methods import MixinPathMethods
 
 
 class CSVManager(MixinPathMethods):
-    def __init__(self, *path_segments, file_name="", depth=None):
-        self.path = Path(*path_segments)
+    def __init__(self, path_string, file_name="", depth=None):
+        self.path = Path(path_string)
         self.depth = depth
         self.file_name_path = self.path.joinpath(file_name)
         self.abs_path = (

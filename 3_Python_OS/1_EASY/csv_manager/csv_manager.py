@@ -1,12 +1,15 @@
 import csv
 from pathlib import Path
+import sys
 
-from mixin_path_methods import MixinPathMethods
+sys.path.append("C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY")
+
+from path_methods import MixinPathMethods
 
 
 class CSVManager(MixinPathMethods):
-    def __init__(self, *path_segments, file_name="", depth=0):
-        self.path = Path(*path_segments)
+    def __init__(self, path_string, file_name="", depth=0):
+        self.path = Path(path_string)
         self.file_name_path = self.path.joinpath(file_name)
         self.abs_path = (
             self.file_name_path
@@ -22,7 +25,6 @@ class CSVManager(MixinPathMethods):
 
     def add_rows_with_header(self, fieldnames: list, row=None, rows=None):
         with open(self.abs_path, "a", newline="") as csvfile:
-
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             if row:
@@ -33,7 +35,6 @@ class CSVManager(MixinPathMethods):
 
     def add_more_rows(self, fieldnames: list, row=None, rows=None):
         with open(self.abs_path, "a", newline="") as csvfile:
-
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if row:
                 writer.writerow(row)
