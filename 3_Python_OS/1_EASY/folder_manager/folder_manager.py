@@ -4,8 +4,8 @@ from warnings import warn
 
 
 class FolderManager:
-    def __init__(self, *path_segments):
-        self.file_path = Path(*path_segments)
+    def __init__(self, path_string):
+        self.file_path = Path(path_string)
         self.abs_path = (
             self.file_path
             if self.file_path.is_absolute()
