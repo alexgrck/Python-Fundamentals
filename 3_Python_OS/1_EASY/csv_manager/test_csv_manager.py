@@ -17,6 +17,10 @@ class TestCSVManager(TestCase):
             "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager",
             "test_file_with_data.csv",
         )
+        self.csv_m_to_update = CSVManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager",
+            "test_file_to_update.csv",
+        )
         self.test_data = [
             ["Name", "Surname", "Address", "City", "State", "Income"],
             ["John", "Doe", "120 jefferson st.", "Riverside", " NJ", "8075"],
@@ -135,5 +139,9 @@ class TestCSVManager(TestCase):
             writer = csv.writer(file, delimiter=",")
             writer.writerows(self.test_data[:2])
 
-    # # def test_update_file(self):
-    # #     pass
+    def test_update_file(self):
+        self.csv_m_to_update.update_csv(self.fieldnames, "City", 2, "Houston")
+        new_line = ["Jack", "McGinnis", "220 hobo Av.", "Houston", " PA", "9119"]
+        with open(self.csv_m_to_update.abs_path, "r", newline="") as file:
+            reader = [line for line in csv.reader(file)]
+            self.assertEqual(reader[2], new_line)
