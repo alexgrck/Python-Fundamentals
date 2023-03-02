@@ -97,10 +97,9 @@ class TestCSVManager(TestCase):
             fieldnames=self.fieldnames,
             row=self.test_dicts[0],
         )
-        final_data1 = self.test_data[:2]
         with open(self.csv_m1.abs_path, "r", newline="") as file:
             reader = [line for line in csv.reader(file)]
-            self.assertEqual(reader, final_data1)
+            self.assertEqual(reader, self.test_data[:2])
         self.csv_m2.add_rows_with_header(
             fieldnames=self.fieldnames, rows=self.test_dicts
         )
