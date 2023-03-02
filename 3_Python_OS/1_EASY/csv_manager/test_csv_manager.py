@@ -163,20 +163,14 @@ class TestCSVManager(TestCase):
         self.assertEqual(scan_depth_0, list_paths_depth_0)
         self.assertEqual(scan_depth_1, list_paths_depth_1)
 
-    # def test_delete_file(self):
-    #     delete_cm = CSVManager(
-    #         "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
-    #         file_name="test_csv.csv",
-    #     )
-    #     delete_cm.delete_file(delete_cm.abs_path)
-    #     path_after_deletion = WindowsPath(
-    #         "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
-    #     )
-    #     self.assertEqual(delete_cm.abs_path, path_after_deletion)
-    # create_cm = CSVManager(
-    #     "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
-    #     file_name="test_csv.csv",
-    # )
-    # create_cm.create_file(create_cm.abs_path)
-    # self.assertEqual(create_cm.file_name_path, create_cm.abs_path)
-    # dlaczego nie tworzy nowego pliku po asercji?
+    def test_delete_file(self):
+        delete_cm = CSVManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
+            file_name="test_csv.csv",
+        )
+        delete_cm.create_file(delete_cm.abs_path)
+        delete_cm.delete_file(delete_cm.abs_path)
+        path_after_deletion = WindowsPath(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
+        )
+        self.assertEqual(delete_cm.abs_path, path_after_deletion)
