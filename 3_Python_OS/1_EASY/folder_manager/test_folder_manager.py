@@ -34,9 +34,6 @@ class TestFolderManager(TestCase):
         )
         test_list = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/folder_manager-easy.md"
-            ),
-            WindowsPath(
                 "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/folder_manager/folder_manager.py"
             ),
             WindowsPath(
