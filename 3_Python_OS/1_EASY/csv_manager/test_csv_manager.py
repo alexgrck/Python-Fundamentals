@@ -142,35 +142,35 @@ class TestCSVManager(TestCase):
             self.assertEqual(reader[2], new_line)
 
     def test_scan_path(self):
-        scan_cm = CSVManager(
-            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
+        scan_m = CSVManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\new1"
         )
-        scan_depth_0 = scan_cm.scan_path(0, scan_cm.abs_path)
+        scan_depth_0 = scan_m.scan_path(0, scan_m.abs_path)
         list_paths_depth_0 = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_file1.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/new1/new1.csv"
             ),
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file2.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/new1/new2/new2.csv"
             ),
         ]
-        scan_depth_1 = scan_cm.scan_path(1, scan_cm.abs_path)
+        scan_depth_1 = scan_m.scan_path(1, scan_m.abs_path)
         list_paths_depth_1 = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file2.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/new1/new2/new2.csv"
             )
         ]
+        scan_depth_2 = scan_m.scan_path(2, scan_m.abs_path)
+        list_paths_depth_2 = []
         self.assertEqual(scan_depth_0, list_paths_depth_0)
         self.assertEqual(scan_depth_1, list_paths_depth_1)
+        self.assertEqual(scan_depth_2, list_paths_depth_2)
 
     def test_delete_file(self):
         delete_cm = CSVManager(
-            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\new1",
             file_name="test_csv.csv",
         )
         delete_cm.create_file(delete_cm.abs_path)
         delete_cm.delete_file(delete_cm.abs_path)
-        path_after_deletion = WindowsPath(
-            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
-        )
-        self.assertEqual(delete_cm.abs_path, path_after_deletion)
+        self.assertFalse(delete_cm.abs_path.exists())
