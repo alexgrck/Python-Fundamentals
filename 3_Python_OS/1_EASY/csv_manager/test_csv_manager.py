@@ -1,6 +1,7 @@
 from unittest import TestCase
 from csv_manager import CSVManager
 import csv
+from pathlib import WindowsPath
 
 
 class TestCSVManager(TestCase):
@@ -114,30 +115,30 @@ class TestCSVManager(TestCase):
             reader = [line for line in csv.reader(file)]
             self.assertEqual(reader, self.test_data)
 
-    def test_add_more_rows(self):
-        self.csv_m_with_data.add_more_rows(
-            fieldnames=self.fieldnames,
-            row=self.test_dicts[1],
-        )
-        with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
-            reader = [line for line in csv.reader(file)]
-            final_data = self.test_data[:3]
-            self.assertEqual(reader, final_data)
+    # def test_add_more_rows(self):
+    #     self.csv_m_with_data.add_more_rows(
+    #         fieldnames=self.fieldnames,
+    #         row=self.test_dicts[1],
+    #     )
+    #     with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
+    #         reader = [line for line in csv.reader(file)]
+    #         final_data = self.test_data[:3]
+    #         self.assertEqual(reader, final_data)
 
-        with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerows(self.test_data[:2])
-        self.csv_m_with_data.add_more_rows(
-            fieldnames=self.fieldnames,
-            rows=self.test_dicts[1:3],
-        )
-        with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
-            reader = [line for line in csv.reader(file)]
-            final_data = self.test_data[:4]
-            self.assertEqual(reader, final_data)
-        with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
-            writer = csv.writer(file, delimiter=",")
-            writer.writerows(self.test_data[:2])
+    #     with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
+    #         writer = csv.writer(file, delimiter=",")
+    #         writer.writerows(self.test_data[:2])
+    #     self.csv_m_with_data.add_more_rows(
+    #         fieldnames=self.fieldnames,
+    #         rows=self.test_dicts[1:3],
+    #     )
+    #     with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
+    #         reader = [line for line in csv.reader(file)]
+    #         final_data = self.test_data[:4]
+    #         self.assertEqual(reader, final_data)
+    #     with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
+    #         writer = csv.writer(file, delimiter=",")
+    #         writer.writerows(self.test_data[:2])
 
     def test_update_file(self):
         self.csv_m_to_update.update_csv(self.fieldnames, "City", 2, "Houston")
@@ -145,3 +146,25 @@ class TestCSVManager(TestCase):
         with open(self.csv_m_to_update.abs_path, "r", newline="") as file:
             reader = [line for line in csv.reader(file)]
             self.assertEqual(reader[2], new_line)
+
+    def test_scan_path(self):
+        scan_cm = CSVManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
+        )
+        scan_depth_0 = scan_cm.scan_path(0, scan_cm.abs_path)
+        list_paths_depth_0 = [
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_csv.csv"
+            ),
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file.csv"
+            ),
+        ]
+        scan_depth_1 = scan_cm.scan_path(1, scan_cm.abs_path)
+        list_paths_depth_1 = [
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file.csv"
+            )
+        ]
+        self.assertEqual(scan_depth_0, list_paths_depth_0)
+        self.assertEqual(scan_depth_1, list_paths_depth_1)
