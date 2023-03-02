@@ -41,24 +41,3 @@ class JsonManager(MixinPathMethods):
             file_data.update(data)
             file.seek(0)
             json.dump(file_data, file, indent=2)
-
-
-# 'C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\json_manager',
-#  'C:\\Program Files\\Python310\\python310.zip',
-#  'C:\\Program Files\\Python310\\DLLs',
-#  'C:\\Program Files\\Python310\\lib',
-#  'C:\\Program Files\\Python310',
-#  'C:\\Users\\aleks\\AppData\\Roaming\\Python\\Python310\\site-packages',
-#  'C:\\Users\\aleks\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32',
-#  'C:\\Users\\aleks\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib',
-#  'C:\\Users\\aleks\\AppData\\Roaming\\Python\\Python310\\site-packages\\Pythonwin',
-#  'C:\\Program Files\\Python310\\lib\\site-packages']
-
-jm = JsonManager(
-    "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\json_manager",
-    file_name="test_json_file.json",
-)
-
-update_dict = {"first": "content", "second": "content"}
-# jm.update_file(["testname1", "testname2"], "2ndfolder")
-jm.update_file(update_dict)
