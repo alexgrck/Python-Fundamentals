@@ -8,7 +8,7 @@ from path_methods import MixinPathMethods
 
 
 class CSVManager(MixinPathMethods):
-    def __init__(self, path_string, file_name="", depth=0):
+    def __init__(self, path_string, file_name=""):
         self.path = Path(path_string)
         self.file_name_path = self.path.joinpath(file_name)
         self.abs_path = (
@@ -16,7 +16,6 @@ class CSVManager(MixinPathMethods):
             if self.file_name_path.is_absolute()
             else Path.cwd().joinpath(self.file_name_path)
         )
-        self.depth = depth
 
     def read_csv(self):
         with open(self.abs_path, "r", newline="") as csvfile:
