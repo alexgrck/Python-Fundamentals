@@ -14,14 +14,7 @@ class TestCSVManager(TestCase):
             "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager",
             "test_csv2.csv",
         )
-        self.csv_m_with_data = CSVManager(
-            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager",
-            "test_file_with_data.csv",
-        )
-        self.csv_m_to_update = CSVManager(
-            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager",
-            "test_file_to_update.csv",
-        )
+
         self.test_data = [
             ["Name", "Surname", "Address", "City", "State", "Income"],
             ["John", "Doe", "120 jefferson st.", "Riverside", " NJ", "8075"],
@@ -115,35 +108,36 @@ class TestCSVManager(TestCase):
             reader = [line for line in csv.reader(file)]
             self.assertEqual(reader, self.test_data)
 
-    # def test_add_more_rows(self):
-    #     self.csv_m_with_data.add_more_rows(
-    #         fieldnames=self.fieldnames,
-    #         row=self.test_dicts[1],
-    #     )
-    #     with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
-    #         reader = [line for line in csv.reader(file)]
-    #         final_data = self.test_data[:3]
-    #         self.assertEqual(reader, final_data)
-
-    #     with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
-    #         writer = csv.writer(file, delimiter=",")
-    #         writer.writerows(self.test_data[:2])
-    #     self.csv_m_with_data.add_more_rows(
-    #         fieldnames=self.fieldnames,
-    #         rows=self.test_dicts[1:3],
-    #     )
-    #     with open(self.csv_m_with_data.abs_path, "r", newline="") as file:
-    #         reader = [line for line in csv.reader(file)]
-    #         final_data = self.test_data[:4]
-    #         self.assertEqual(reader, final_data)
-    #     with open(self.csv_m_with_data.abs_path, "w", newline="") as file:
-    #         writer = csv.writer(file, delimiter=",")
-    #         writer.writerows(self.test_data[:2])
+    def test_add_more_rows(self):
+        self.csv_m1.create_file(self.csv_m1.abs_path)
+        self.csv_m1.add_rows_with_header(
+            fieldnames=self.fieldnames,
+            row=self.test_dicts[0],
+        )
+        self.csv_m1.add_more_rows(
+            fieldnames=self.fieldnames,
+            row=self.test_dicts[1],
+        )
+        with open(self.csv_m1.abs_path, "r", newline="") as file:
+            reader = [line for line in csv.reader(file)]
+            self.assertEqual(reader, self.test_data[:3])
+        self.csv_m1.add_more_rows(
+            fieldnames=self.fieldnames,
+            rows=self.test_dicts[2:],
+        )
+        with open(self.csv_m1.abs_path, "r", newline="") as file:
+            reader = [line for line in csv.reader(file)]
+            self.assertEqual(reader, self.test_data)
 
     def test_update_file(self):
-        self.csv_m_to_update.update_csv(self.fieldnames, "City", 2, "Houston")
+        self.csv_m1.create_file(self.csv_m1.abs_path)
+        self.csv_m1.add_rows_with_header(
+            fieldnames=self.fieldnames,
+            rows=self.test_dicts,
+        )
+        self.csv_m1.update_csv(self.fieldnames, "City", 2, "Houston")
         new_line = ["Jack", "McGinnis", "220 hobo Av.", "Houston", " PA", "9119"]
-        with open(self.csv_m_to_update.abs_path, "r", newline="") as file:
+        with open(self.csv_m1.abs_path, "r", newline="") as file:
             reader = [line for line in csv.reader(file)]
             self.assertEqual(reader[2], new_line)
 
@@ -154,17 +148,35 @@ class TestCSVManager(TestCase):
         scan_depth_0 = scan_cm.scan_path(0, scan_cm.abs_path)
         list_paths_depth_0 = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_csv.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_file1.csv"
             ),
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file2.csv"
             ),
         ]
         scan_depth_1 = scan_cm.scan_path(1, scan_cm.abs_path)
         list_paths_depth_1 = [
             WindowsPath(
-                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file.csv"
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/csv_manager/test_file/test_directory/test_file2.csv"
             )
         ]
         self.assertEqual(scan_depth_0, list_paths_depth_0)
         self.assertEqual(scan_depth_1, list_paths_depth_1)
+
+    # def test_delete_file(self):
+    #     delete_cm = CSVManager(
+    #         "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
+    #         file_name="test_csv.csv",
+    #     )
+    #     delete_cm.delete_file(delete_cm.abs_path)
+    #     path_after_deletion = WindowsPath(
+    #         "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file"
+    #     )
+    #     self.assertEqual(delete_cm.abs_path, path_after_deletion)
+    # create_cm = CSVManager(
+    #     "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\csv_manager\\test_file",
+    #     file_name="test_csv.csv",
+    # )
+    # create_cm.create_file(create_cm.abs_path)
+    # self.assertEqual(create_cm.file_name_path, create_cm.abs_path)
+    # dlaczego nie tworzy nowego pliku po asercji?
