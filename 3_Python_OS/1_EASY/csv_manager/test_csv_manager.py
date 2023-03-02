@@ -80,7 +80,7 @@ class TestCSVManager(TestCase):
 
     def test_create_file(self):
         self.csv_m1.create_file(self.csv_m1.abs_path)
-        self.assertTrue(self.csv_m1.abs_path.exists(), True)
+        self.assertTrue(self.csv_m1.abs_path.exists())
 
     def test_read_file(self):
         self.csv_m1.create_file(self.csv_m1.abs_path)
