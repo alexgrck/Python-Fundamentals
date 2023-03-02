@@ -2,6 +2,7 @@ from json_manager import JsonManager
 
 from unittest import TestCase
 import json
+from pathlib import WindowsPath
 
 
 class TestJsonManager(TestCase):
@@ -16,7 +17,8 @@ class TestJsonManager(TestCase):
         }
 
     def tearDown(self):
-        self.json_m.abs_path.unlink()
+        if self.json_m.abs_path.exists():
+            self.json_m.abs_path.unlink()
 
     def test_create_file(self):
         file_path = self.json_m.path.joinpath("test_file.json")
@@ -59,3 +61,37 @@ class TestJsonManager(TestCase):
         with open(self.json_m.abs_path, "r") as file:
             loaded = json.load(file)
             self.assertEqual(dict_with_append, loaded)
+
+    def test_scan_path(self):
+        scan_m = JsonManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\json_manager\\test_folder"
+        )
+        scan_depth_0 = scan_m.scan_path(0, scan_m.path, ext=".json")
+        list_paths_depth_0 = [
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/json_manager/test_folder/test_file1.json"
+            ),
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/json_manager/test_folder/inner_folder/test_file2.json"
+            ),
+        ]
+        scan_depth_1 = scan_m.scan_path(1, scan_m.path, ext=".json")
+        list_paths_depth_1 = [
+            WindowsPath(
+                "C:/Ola/LocalHost/python-fundamentals-master/3_Python_OS/1_EASY/json_manager/test_folder/inner_folder/test_file2.json"
+            )
+        ]
+        scan_depth_2 = scan_m.scan_path(2, scan_m.path, ext=".json")
+        list_paths_depth_2 = []
+        self.assertEqual(scan_depth_0, list_paths_depth_0)
+        self.assertEqual(scan_depth_1, list_paths_depth_1)
+        self.assertEqual(scan_depth_2, list_paths_depth_2)
+
+    def test_delete_file(self):
+        delete_cm = JsonManager(
+            "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY\\json_manager\\test_folder",
+            file_name="test_file2.json",
+        )
+        delete_cm.create_file(delete_cm.abs_path)
+        delete_cm.delete_file(delete_cm.abs_path)
+        self.assertFalse(delete_cm.abs_path.exists())
