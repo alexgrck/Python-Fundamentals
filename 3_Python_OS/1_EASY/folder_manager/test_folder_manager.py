@@ -61,7 +61,7 @@ class TestFolderManager(TestCase):
             self.fm.delete_folders(folder_path)
         self.assertTrue(folder_path)
 
-    @patch("builtins.input", return_value="y")
+    @patch("builtins.input", return_value="n")
     def test_delete_folder_with_subdirectories_no_input(self, mocked_input):
         self.fm.create_folders("folder1", "folder2")
         folder_path = self.fm.abs_path.joinpath("folder1", "folder2")
