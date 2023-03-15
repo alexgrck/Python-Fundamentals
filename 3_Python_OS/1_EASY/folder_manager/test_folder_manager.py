@@ -1,8 +1,8 @@
 import os
 import shutil
+from itertools import chain
 from unittest import TestCase
 from unittest.mock import patch
-from itertools import chain
 
 from folder_manager import FolderManager
 
@@ -10,20 +10,22 @@ from folder_manager import FolderManager
 class TestFolderManager(TestCase):
     def setUp(self):
         self.fm = FolderManager("5_test_folder")
-        self.full_path = os.path.join(os.getcwd(), "5_test_folder/test_1/test2/test3")
-        self.middle_path = os.path.join(os.getcwd(), "5_test_folder/test_1/test2")
+        self.full_path = os.path.join(
+            os.getcwd(), "5_test_folder", "test_1", "test2", "test3"
+        )
+        self.middle_path = os.path.join(os.getcwd(), "5_test_folder", "test_1", "test2")
 
     def tearDown(self):
         shutil.rmtree(os.path.join(os.getcwd(), "5_test_folder"))
 
     def test_create_folders(self):
-        self.fm.create_folders("test_1/test2/test3")
+        self.fm.create_folders("test_1", "test2", "test3")
         self.assertTrue(os.path.exists(self.full_path))
 
     def test_list_content_of_folder(self):
         os.makedirs(self.full_path)
         path = os.path.join(os.getcwd(), "5_test_folder")
-        list_content = self.fm.list_content_of_folder(path)
+        list_content = self.fm.list_content_of_folder()
         result_list = list(
             chain.from_iterable([dirs for root, dirs, files in os.walk(path)])
         )
@@ -69,3 +71,19 @@ class TestFolderManager(TestCase):
         for root, dirs, files in os.walk(path_second):
             self.assertTrue(dirs)
             self.assertTrue(files)
+
+
+# /home/user/root_folder
+
+# root folder -> main.py -> import FolderManager
+## folder1 -> folder_manager.py -> definicja FolderManager()
+
+# NAJPIERW trzeba zaimportować w root_folder/folder1/folder_manager.py
+# A NASTĘPNIE w root_folder/main.py importować z folder1.folder_manager definicję FolderManager
+
+
+### subfolder1
+### subfolder2
+### subfolder3
+## folder2
+## folder3

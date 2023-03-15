@@ -1,35 +1,26 @@
+import os
 import shutil
 from warnings import warn
-import os
 
 
 class FolderManager:
-    def __init__(self, path_string):
-        self.abs_path = (
-            os.path.normpath(path_string)
-            if os.path.isabs(path_string)
-            else os.path.abspath(path_string)
-        )
+    def __init__(self, *path_elements):
+        self.abs_path = os.path.abspath(os.path.join(*path_elements))
 
     def create_folders(self, *directories):
         path = os.path.join(self.abs_path, *directories)
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
 
-    def list_content_of_folder(self, folder_path):
-        f_path = (
-            os.path.normpath(folder_path)
-            if os.path.isabs(folder_path)
-            else os.path.abspath(folder_path)
-        )
+    def list_content_of_folder(self):
         return [
-            folder for root, folders, files in os.walk(f_path) for folder in folders
+            folder
+            for root, folders, files in os.walk(self.abs_path)
+            for folder in folders
         ]
 
     def delete_folders(self, path):
-        f_path = (
-            os.path.normpath(path) if os.path.isabs(path) else os.path.abspath(path)
-        )
+        f_path = os.path.abspath(path)
         try:
             os.rmdir(f_path)
         except OSError:

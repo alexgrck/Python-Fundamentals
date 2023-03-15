@@ -1,21 +1,19 @@
 import csv
 from pathlib import Path
 import sys
+import os
 
-sys.path.append("C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY")
+sys.path.insert(
+    0, "C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY"
+)
 
-from path_methods import MixinPathMethods
+from mixin_path_methods import MixinPathMethods
 
 
 class CSVManager(MixinPathMethods):
-    def __init__(self, path_string, file_name=""):
-        self.path = Path(path_string)
-        self.file_name_path = self.path.joinpath(file_name)
-        self.abs_path = (
-            self.file_name_path
-            if self.file_name_path.is_absolute()
-            else Path.cwd().joinpath(self.file_name_path)
-        )
+    def __init__(self, *path_elements, file_name=""):
+        self.abs_path = os.path.abspath(os.path.join(*path_elements, file_name))
+        self.pathlib_path = Path(self.abs_path)
 
     def read_csv(self):
         with open(self.abs_path, "r", newline="") as csvfile:
