@@ -1,9 +1,6 @@
 import json
-import sys
 from pathlib import Path
 import os
-
-sys.path.append("C:\\Ola\\LocalHost\\python-fundamentals-master\\3_Python_OS\\1_EASY")
 
 from mixin_path_methods import MixinPathMethods
 
@@ -11,7 +8,7 @@ from mixin_path_methods import MixinPathMethods
 class JsonManager(MixinPathMethods):
     def __init__(self, *path_elements, file_name=""):
         self.folders_path = os.path.join(*path_elements)
-        self.file_path = os.path.abspath(os.path.join(*path_elements, file_name))
+        self.file_path = Path(os.path.join(*path_elements, file_name)).absolute()
 
     def read_file(self):
         """Reading json file."""
