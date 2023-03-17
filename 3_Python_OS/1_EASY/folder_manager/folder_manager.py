@@ -1,11 +1,12 @@
 import os
 import shutil
 from warnings import warn
+from pathlib import Path
 
 
 class FolderManager:
     def __init__(self, *path_elements):
-        self.abs_path = os.path.abspath(os.path.join(*path_elements))
+        self.abs_path = Path(os.path.join(*path_elements)).absolute()
 
     def create_folders(self, *directories):
         path = os.path.join(self.abs_path, *directories)
