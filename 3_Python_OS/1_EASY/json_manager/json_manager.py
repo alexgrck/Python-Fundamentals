@@ -7,7 +7,6 @@ from mixin_path_methods import MixinPathMethods
 
 class JsonManager(MixinPathMethods):
     def __init__(self, *path_elements, file_name=""):
-        self.folders_path = os.path.join(*path_elements)
         self.file_path = Path(os.path.join(*path_elements, file_name)).absolute()
 
     def read_file(self):
