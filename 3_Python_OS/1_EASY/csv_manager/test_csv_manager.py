@@ -141,9 +141,8 @@ class TestCSVManager(TestCase):
         file1_path = Path(self.folder_path).joinpath("read.csv")
         file2_path = Path(self.folder_path).joinpath("to_delete.csv")
         file3_path = Path(self.folder_path).joinpath("with_header.csv")
-        folder_4_path = Path(self.folder_path).joinpath("test_sub")
-        file4_path = Path(folder_4_path).joinpath("test_file.csv")
-        Path.mkdir(Path(folder_4_path), parents=True)
+        file4_path = Path(self.folder_path).joinpath("test_sub", "test_file.csv")
+        Path.mkdir(Path(file4_path).parent)
         with open(file1_path, "w", newline=""), open(file2_path, "w", newline=""), open(
             file3_path, "w", newline=""
         ), open(file4_path, "w", newline=""):
