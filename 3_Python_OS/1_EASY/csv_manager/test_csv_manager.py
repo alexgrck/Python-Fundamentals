@@ -10,9 +10,8 @@ class TestCSVManager(TestCase):
     def setUp(self):
         self.test_manager = CSVManager("test_folder", file_name="test_file.csv")
         self.file_path = os.path.join(os.getcwd(), "test_folder", "test_file.csv")
-        self.folder_path = os.path.join(os.getcwd(), "test_folder")
-        self.folder_path_pathlib = Path(self.folder_path)
-        Path.mkdir(self.folder_path_pathlib, parents=True)
+        self.folder_path = Path(os.path.join(os.getcwd(), "test_folder"))
+        Path.mkdir(self.folder_path, parents=True)
 
         self.test_data = [
             ["Name", "Surname", "Address", "City", "State", "Income"],
