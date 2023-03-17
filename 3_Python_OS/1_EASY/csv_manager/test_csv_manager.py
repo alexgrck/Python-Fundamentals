@@ -1,9 +1,9 @@
+import csv
+import os
+import shutil
+from pathlib import Path
 from unittest import TestCase
 from csv_manager import CSVManager
-import csv
-from pathlib import Path
-import shutil
-import os
 
 
 class TestCSVManager(TestCase):
@@ -12,6 +12,7 @@ class TestCSVManager(TestCase):
         self.file_path = os.path.join(os.getcwd(), "test_folder", "test_file.csv")
         self.folder_path = os.path.join(os.getcwd(), "test_folder")
         self.folder_path_pathlib = Path(self.folder_path)
+        Path.mkdir(self.folder_path_pathlib, parents=True)
 
         self.test_data = [
             ["Name", "Surname", "Address", "City", "State", "Income"],
@@ -77,12 +78,10 @@ class TestCSVManager(TestCase):
             os.remove(self.file_path)
 
     def test_create_file(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
         self.test_manager.create_file(self.file_path)
         self.assertTrue(os.path.exists(self.file_path))
 
     def test_read_file(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
         with open(self.file_path, "w+", newline="") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerows(self.test_data)
@@ -90,7 +89,6 @@ class TestCSVManager(TestCase):
         self.assertEqual(self.test_data, read)
 
     def test_add_rows_with_header(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
         with open(self.file_path, "w+", newline="") as file:
             self.test_manager.add_rows_with_header(
                 fieldnames=self.fieldnames,
@@ -108,7 +106,6 @@ class TestCSVManager(TestCase):
             self.assertEqual(reader, self.test_data)
 
     def test_add_more_rows(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
         with open(self.file_path, "w", newline="") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerows(self.test_data[:2])
@@ -130,7 +127,6 @@ class TestCSVManager(TestCase):
             self.assertEqual(reader, self.test_data)
 
     def test_update_file(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
         with open(self.file_path, "w", newline="") as file:
             writer = csv.writer(file, delimiter=",")
             writer.writerows(self.test_data)
@@ -142,28 +138,25 @@ class TestCSVManager(TestCase):
             self.assertEqual(reader[2], new_line)
 
     def test_scan_path(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
-
-        file1_path = os.path.join(self.folder_path, "read.csv")
-        file2_path = os.path.join(self.folder_path, "to_delete.csv")
-        file3_path = os.path.join(self.folder_path, "with_header.csv")
-        file4_path = os.path.join(self.folder_path, "test_sub", "test_file.csv")
-        Path.mkdir(Path(file4_path).parent)
-        with open(file1_path, "w", newline="") as file1, open(
-            file2_path, "w", newline=""
-        ) as file2, open(file3_path, "w", newline="") as file3, open(
-            file4_path, "w", newline=""
-        ) as file4:
+        file1_path = Path(self.folder_path).joinpath("read.csv")
+        file2_path = Path(self.folder_path).joinpath("to_delete.csv")
+        file3_path = Path(self.folder_path).joinpath("with_header.csv")
+        folder_4_path = Path(self.folder_path).joinpath("test_sub")
+        file4_path = Path(folder_4_path).joinpath("test_file.csv")
+        Path.mkdir(Path(folder_4_path), parents=True)
+        with open(file1_path, "w", newline=""), open(file2_path, "w", newline=""), open(
+            file3_path, "w", newline=""
+        ), open(file4_path, "w", newline=""):
             pass
         scan_depth_0 = self.test_manager.scan_path(0, self.folder_path)
         list_paths_depth_0 = [
-            "test_folder\\read.csv",
-            "test_folder\\to_delete.csv",
-            "test_folder\\with_header.csv",
-            "test_folder\\test_sub\\test_file.csv",
+            Path(file1_path),
+            Path(file2_path),
+            Path(file3_path),
+            Path(file4_path),
         ]
         scan_depth_1 = self.test_manager.scan_path(1, self.folder_path)
-        list_paths_depth_1 = ["test_folder\\test_sub\\test_file.csv"]
+        list_paths_depth_1 = [Path(file4_path)]
         scan_depth_2 = self.test_manager.scan_path(2, self.folder_path)
         list_paths_depth_2 = []
         self.assertEqual(scan_depth_0, list_paths_depth_0)
@@ -171,9 +164,7 @@ class TestCSVManager(TestCase):
         self.assertEqual(scan_depth_2, list_paths_depth_2)
 
     def test_delete_file(self):
-        Path.mkdir(self.folder_path_pathlib, parents=True)
-
-        with open(self.file_path, "w", newline="") as file:
+        with open(self.file_path, "w", newline=""):
             pass
         self.test_manager.delete_file(self.file_path)
         self.assertFalse(os.path.exists(self.file_path))
