@@ -1,6 +1,5 @@
 import os
-
-from shutil import make_archive, unpack_archive
+from shutil import make_archive, unpack_archive, rmtree
 from zipfile import ZipFile
 
 
@@ -27,7 +26,6 @@ class ArchiveMixin:
         os.mkdir(temp_path)
         with ZipFile(archive_path, "r") as archive:
             archive.extractall(temp_path)
-        arch_name = os.path.basename(os.path.splitext(archive_path)[0])
         os.remove(archive_path)
         os.remove(temp_file)
         os.chdir(temp_path)
@@ -35,3 +33,5 @@ class ArchiveMixin:
             for root, dirs, files in os.walk(temp_path):
                 for file in files:
                     archive.write(os.path.relpath(os.path.join(root, file)))
+        os.chdir(os.path.dirname(archive_path))
+        rmtree(temp_path)
