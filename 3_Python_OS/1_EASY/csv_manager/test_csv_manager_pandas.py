@@ -134,82 +134,24 @@ class TestCSVManager(TestCase):
         self.assertTrue(read_from_manager.equals(read_from_file_path))
 
     def test_scan_path(self):
-        # wyprintować krok po kroku wszystkie etapy
-
-        # powinno być with, scenariusz
-        # akcja
-        # print("DELETING FILES")
-        # print(os.remove(self.file_path))
-        # print(os.remove(self.file_path2))
-        # tu dopier jest with
         files_list = ["read.csv", "to_delete.csv", "with_header.csv"]
-        print("INITIAL FILES LIST")
-        print(files_list)
-        print("CREATING FILES FROM PATHS")
         paths_list = []
         for file in files_list:
-            print(self.folder_path.joinpath(file).touch())
+            self.folder_path.joinpath(file).touch()
             paths_list.append(self.folder_path.joinpath(file))
-        print("PATHS_LIST AFTER APPENDING")
-        print(paths_list)
-        # self.folder_path.joinpath("read.csv").touch()
-        # self.folder_path.joinpath("to_delete.csv").touch()
-        # self.folder_path.joinpath("with_header.csv").touch()
-
-        # za dużo powtórzeń - self.folder_path.joinpath("test_sub")
-        print("CREATING TEST_SUB DIR")
-        # print(self.folder_path.joinpath("test_sub").mkdir())
-        print(self.test_sub.mkdir())
-        print("CREATING FILE IN TEST_SUB")
-        # print(self.test_sub.joinpath("test_file.csv").touch())
-        print(self.test_file.touch())
-        # print("CREATING PATHS FROM FILES LIST - 3 PATHS")
-        # paths_list = [self.folder_path.joinpath(file) for file in files_list]
-        # print(paths_list)
+        self.test_sub.mkdir()
+        self.test_file.touch()
         paths_list.append(self.test_file)
-        print("PATHS LIST AFTER APPENDING NEW FILE")
-        print(paths_list)
-        # paths_list.extend(
-        #     [
-        #         self.folder_path.joinpath("test_sub", "test_file.csv"),
-        #         self.file_path,
-        #         self.file_path2,
-        #     ])
-        # file1_path = self.folder_path.joinpath("read.csv")
-        # file2_path = self.folder_path.joinpath("to_delete.csv")
-        # file3_path = self.folder_path.joinpath("with_header.csv")
-        # # Path.mkdir(folder_file4_path)
-        # file4_path = self.folder_path.joinpath("test_sub", "test_file.csv")
         paths_list.append(self.file_path)
         paths_list.append(self.file_path2)
+
         scan_depth_0 = self.test_manager.scan_path(0, self.folder_path)
-        print("SCAN 0")
-        print(scan_depth_0)
         list_paths_depth_0 = sorted(paths_list)
-        print("LIST_PATHS_DEPTH_0")
-        print(list_paths_depth_0)
-        # list_paths_depth_0 = [
-        #     self.file_path,
-        #     self.file_path2,
-        #     file1_path,
-        #     file2_path,
-        #     file3_path,
-        #     file4_path,
-        # ]
-        # NIE DZIAŁA Z DODANIEM ŚCIEŻEK DO LISTY
         scan_depth_1 = self.test_manager.scan_path(1, self.folder_path)
-        print("SCAN 1")
-        print(scan_depth_1)
-        # list_paths_depth_1 = [self.folder_path.joinpath("test_sub", "test_file.csv")]
         list_paths_depth_1 = [self.test_file]
-        print("LIST_PATHS_DEPTH_1")
-        print(list_paths_depth_1)
         scan_depth_2 = self.test_manager.scan_path(2, self.folder_path)
-        print("SCAN 2")
-        print(scan_depth_2)
         list_paths_depth_2 = []
-        print("LIST_PATHS_DEPTH_2")
-        print(list_paths_depth_2)
-        print(self.assertEqual(scan_depth_0, list_paths_depth_0))
-        # print(self.assertEqual(scan_depth_1, list_paths_depth_1))
-        # print(self.assertEqual(scan_depth_2, list_paths_depth_2))
+
+        self.assertEqual(sorted(scan_depth_0), list_paths_depth_0)
+        self.assertEqual(scan_depth_1, list_paths_depth_1)
+        self.assertEqual(scan_depth_2, list_paths_depth_2)
