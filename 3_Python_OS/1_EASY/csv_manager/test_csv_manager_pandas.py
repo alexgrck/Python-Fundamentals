@@ -67,7 +67,6 @@ class TestCSVManager(TestCase):
         shutil.rmtree(self.folder_path)
 
     def test_read_file(self):
-        # sprawdzić pierwsze 3 wiersze, czy są poprawne
         read_from_manager = self.test_manager.read_csv()[:3]
 
         read_from_file_path = pd.read_csv(self.file_path)[:3]
